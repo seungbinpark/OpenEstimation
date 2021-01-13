@@ -1,0 +1,20 @@
+1. event가 발생했을 때 시스템에서 기존에 저장되어 있는 함수를 호출하는 것
+
+2. 전자는 크기 변환이 가능 후자는 크기 변환이 불가능
+
+3.  	img 그릴 대상 행렬
+	center 원의 중심 좌표
+	axes 타원의 절반 크기 (x축 반지름, y축 반지름)
+	angle 타원의 각도 (3시 방향이 0도, 시계방향 회전)
+	startAngle 호의 시작 각도
+	endAngle 호의 종료 각도
+	color 선의 색상
+	thickness 선의 두께
+	lineType 선의 형태
+	shift 좌표에 대한 비트 시프트
+
+4.	setMouseCallback(windowName, onMouse, param=None)
+	
+	winname 이벤트 발생을 확인할 윈도우 이름, 문자열
+	onMouse 마우스 이벤트를 처리하는 콜백 함수 이름(콜백함수)
+	param 이벤트 처리 함수로 전달할 추가적인 사용자 정의 인수
