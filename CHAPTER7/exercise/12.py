@@ -1,0 +1,33 @@
+import numpy as np, cv2
+
+image = cv2.imread("images/image.jpg", cv2.IMREAD_GRAYSCALE)
+if image is None: raise Exception("영상파일 읽기 오류")
+
+data1 = [[0, 1, 0],
+         [1, -4, 1],
+         [0, 1, 0]]
+data2 = [[-1, -1, -1],
+         [-1, 8, -1],
+         [-1, -1, -1]]
+
+mask4 = np.array(data1, np.int16)
+mask8 = np.array(data2, np.int16)
+
+dst1 = cv2.filter2D(image, cv2.CV_16S, mask4)
+dst2 = cv2.filter2D(image, cv2.CV_16S, mask8)
+dst3 = cv2.Laplacian(image, cv2.CV_16S, 1)
+
+gaus = cv2.GaussianBlur(image, (7, 7), 0, 0)
+dst1 = cv2.Laplacian(gaus, cv2.CV_16S, 7)
+
+gaus1 = cv2.GaussianBlur(image, (3, 3), 0)
+gaus2 = cv2.GaussianBlur(image, (9, 9), 0)
+dst2 = gaus1 - gaus2
+
+cv2.imshow("image", image)
+cv2.imshow("filter2D 4-direction", cv2.convertScaleAbs(dst1))
+cv2.imshow("filter2D 8-direction", cv2.convertScaleAbs(dst2))
+cv2.imshow("Laplacian_OpenCV", cv2.convertScaleAbs(dst3))
+cv2.imshow("dst1- LoG", dst1.astype('uint8'))
+cv2.imshow("dst2- DoF", dst2)
+cv2.waitKey(0)
