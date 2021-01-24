@@ -1,0 +1,60 @@
+1. 순방향 사상 - 입력 영상의 좌표를 중심으로 목적 영상의 좌표를 계산하여 화소의 위치를 변환하는 방식 => 홀이나 오버랩 발생 가능
+   역방향 사상 - 목적 영상의 좌표를 중심으로 역변환을 계산하여 해당하는 원본 영상의 좌표를 찾아서 화소값을 가져오는 방식 => 여러 화소에서 사용하게 되면 결과 영상의 품질 다운
+
+2. 홀 - 입력 영상의 좌표들, 목적 영상의 좌표를 만드는 과정에서 사상되지 않은 화소
+   오버랩 - 영상을 축소할 때 주로 발생, 입력 영상의 여러 화소들이 목적 영상의 한 화소로 사상되는 것
+
+3. 홀과 오버랩을 방지하기 위해 화소들을 배치하여 목적 영상을 만드는 기법
+	cv2.INTER_NEAREST	0	최근접 이웃 보간
+	cv2.INTER_LINEAR		1	양선형 보간(기본값)
+	cv2.INTER_CUBIC		2	바이큐빅 보간 - 4x4 이웃 화소 이용
+	cv2.INTER_AREA		3	픽셀 영역의 관계로 리샘플링
+	cv2.INTER_LANCZOS4	4	Lanczos 보간 - 8x8 이웃 화소 이용
+
+4. 목적 영상을 만드는 과정에서 홀이 되어 화소값을 할당 받지 못한 위치에 값을 찾을 때, 그 위치에 가장 가깝게 이웃한 입력 영상의 화소값을 가져오는 방법
+
+5. 4개 화소 구성 -> 직선 구성 -> 중간 화소값 계산 -> 최종 화소값 계산
+
+6.
+
+7. cv2.warpAffine(src, M, dsize, dst, flags, borderMode, borderValue)
+	src : 입력 영상
+	dst : 반환 영상
+	M : 어파인 변환 행렬
+	dsize : 반환 영상의 크기
+	flags : 보간 방법
+	borderMode : 경계지정 방법
+
+   cv2.getAffineTransform(src, dst)
+	src : 입력 영상 좌표 3개 (행렬로 구성)
+	dst : 목적 영상 좌표 3개 (행렬로 구성)
+
+   cv2.getRotationMatrix2D(center, angle, scale)
+	center : 회전의 중심점
+	angle : 회전각도, 양수 각도가 반시계 방향 회전 수행
+	scale : 변경할 크기
+
+   cv2.invertAffineTransform(M, iM)
+	M : 어파인 변환 행렬
+	iM : 어파인 역변환 행렬
+
+8. 3차원의 실세계의 좌표 P를 투영 스크린상의 2차원 좌표로 표현할 수 있도록 변환하는 것
+
+9. cv2.getPerspectiveTransform(src, dst, solveMethod)
+	src : 입력 영상 4개 좌표
+	dst : 목적 영상 4개 좌표
+	borderMode : 경계지정 방법
+
+   cv2.warpPerspective(src, M, dsize, dst, flags, borderMode, borderValue)
+	src : 입력 영상
+	M : 원근 변환 행렬
+	dsize : 결과 영상의 크기
+	dst : 결과 영상
+	flags : 보간 방법
+	borderMode : 경계지정 방법
+	borderValue : 상수 경계일 때, 경계 화소값
+
+   cv2.transform(src, M)
+	src : 입력 좌표 행렬
+	M : 원근 변환 행렬
+	dst : 결과 좌표 행렬
