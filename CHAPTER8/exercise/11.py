@@ -2,19 +2,6 @@ import numpy as np, math, cv2
 from Common.interpolation import bilinear_value
 from Common.utils import contain
 
-def rotate(img, degree):
-    dst = np.zeros(img.shape[:2], img.dtype)
-    radian = (degree/180) * np.pi
-    sin, cos = np.sin(radian), np.cos(radian)
-
-    for i in range(img.shape[0]):
-        for j in range(img.shape[1]):
-            y = -j * sin + i * cos
-            x = j * cos + i * sin
-            if contain((y, x), img.shape):
-                dst[i, j] = bilinear_value(img, [x, y])
-    return dst
-
 def rotate_pt(img, degree, pt):
     dst = np.zeros(img.shape[:2], img.dtype)
     radian = (degree/180) * np.pi
@@ -30,14 +17,18 @@ def rotate_pt(img, degree, pt):
                 dst[i, j] = bilinear_value(img, (x, y))
     return dst
 
-image = cv2.imread("images/rotate.jpg", cv2.IMREAD_COLOR)
+image = cv2.imread("images/translate.jpg", cv2.IMREAD_COLOR)
 if image is None: raise Exception("영상파일 읽기 오류")
 
-center = np.divmod(image.shape[::-1], 2)[0]
-dst1 = rotate(image, 20)
-dst2 = rotate_pt(image, 20, center)
+center = (100, 100)
+angle, scale = 30, 1
+
+dst1 = rotate_pt(image, angle, center)
+
+rot_mat = cv2.getRotationMatrix2D(center, angle, scale)
+dst2 = cv2.warpAffine(image, rot_mat, image.shape[::-1])
 
 cv2.imshow("image", image)
-cv2.imshow("dst1: rotated on (0, 0)", dst1)
-cv2.imshow("dst2: rotated on center point", dst2)
+cv2.imshow("dst1", dst1)
+cv2.imshow("dst2", dst2)
 cv2.waitKey(0)
