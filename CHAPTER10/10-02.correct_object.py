@@ -3,7 +3,7 @@ from Common.hough import houghLines, draw_houghLines
 
 def detect_maxObject(img):
     results = cv2.findContours(img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-    if int(cv2._version[0]) >= 4:
+    if int(cv2._version_[0]) >= 4:
         contours = results[0]
     else:
         contours = results[1]
